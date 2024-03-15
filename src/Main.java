@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         //Инициализируем Reader
         br = new BufferedReader(new InputStreamReader(System.in));
-        //Инициализируем класс для боя
+                //Инициализируем класс для боя
         battleScene = new BattleScene();
         //Первое, что нужно сделать при запуске игры, это создать персонажа, поэтому мы предлагаем ввести его имя
         System.out.println("Введите имя персонажа:");
@@ -37,13 +37,20 @@ public class Main {
             );
             System.out.println(String.format("Спасти наш мир от драконов вызвался %s! Ура-а-а! В бой!",
                     player.getName()));
+
             //Метод для вывода меню
             Navigation();
+            try {
+                command(br.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //Варианты для команд
         switch (string) {
             case "1": {
                 commitSell();
+
                 // System.out.println("Торговец еще не приехал");
                 // command(br.readLine());
                 // Trader trader = new Trader();
@@ -98,13 +105,19 @@ public class Main {
                 player.decreaseGold(goldAmount);
                 trader.increaseGold(goldAmount);
 
-                System.out.println("Торговля прошла успешно! Герой заплатил " + goldAmount + " золотых.");
+                System.out.println("Торговля прошла успешно! Герой заплатил " + goldAmount + " золотых. " +
+                        "Желаете продолжить? да/нет");
             } else {
-                System.out.println("У героя недостаточно золота для покупки товара.");
+                System.out.println("У героя недостаточно золота для покупки товара." +
+                        "Желаете продолжить? да/нет");
             }
-        } else {
-            System.out.println("Создайте героя перед тем, как начать торговлю.");
         }
+        try {
+            command(br.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
