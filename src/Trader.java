@@ -5,10 +5,10 @@ public class Trader implements Seller {
     private int price = 10;// Стоимость зелья
 
     public Trader(String торговец, int gold, int price) {
-            this.name = торговец;
-            this.gold = gold;
-            this.price = price;
-        }
+        this.name = торговец;
+        this.gold = gold;
+        this.price = price;
+    }
 
     @Override
     public String sell(Goods goods) {
@@ -20,6 +20,7 @@ public class Trader implements Seller {
                 if (gold >= 10) {
                     result = "Вы купили зелье за " + price + " золота. У вас осталось " + gold + " золота." +
                             " Желаете продолжить покупки? (да/нет)";
+                    increaseGold(10); // Добавляем увеличение денег у торговца после совершения покупки
                 } else {
                     result = "Слишком мало денег. Хотите выйти? (да/нет)";
                 }
@@ -27,6 +28,7 @@ public class Trader implements Seller {
         }
         return result;
     }
+
     private boolean hasEnoughMoney(int price) {
         return gold >= price;
     }
@@ -36,10 +38,10 @@ public class Trader implements Seller {
     }
 
     public void increaseGold(int goldAmount) {
-                    this.gold += goldAmount;
-            System.out.println("Торговец получил " + goldAmount + " золота. Теперь у него " + this.gold + " золота.");
-        }
-    
+        gold += goldAmount;
+        System.out.println("Торговец получил " + goldAmount + " золота. Теперь у него " + gold + " золота.");
+    }
+
     public enum Goods {
         POTION
     }

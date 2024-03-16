@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         //Инициализируем Reader
         br = new BufferedReader(new InputStreamReader(System.in));
-                //Инициализируем класс для боя
+        //Инициализируем класс для боя
         battleScene = new BattleScene();
         //Первое, что нужно сделать при запуске игры, это создать персонажа, поэтому мы предлагаем ввести его имя
         System.out.println("Введите имя персонажа:");
@@ -51,25 +51,6 @@ public class Main {
             case "1": {
                 commitSell();
 
-                // System.out.println("Торговец еще не приехал");
-                // command(br.readLine());
-                // Trader trader = new Trader();
-                //System.out.println(trader.sell(Trader.Goods.POTION));
-                // String sellResult = trader.sell(Trader.Goods.POTION);
-                // System.out.println(sellResult);
-                // String input = br.readLine().toLowerCase();
-                // if (input.equals("да")) {
-                //     command("1");
-                // } else {
-                //     command(input);
-                // String input = br.readLine();
-                // if ("да".equalsIgnoreCase(input)) {
-                //     command("1");
-                // } else if ("нет".equalsIgnoreCase(input)) {
-                //     Navigation();
-                //     command(br.readLine());
-                // } else {
-                //     command(input);
             }
             break;
 
@@ -94,7 +75,8 @@ public class Main {
         }
     }
 
-    private static void commitSell() {
+    private static void commitSell() throws IOException {
+
         if (player != null) {
             Trader trader = new Trader("Торговец", 50, 10);
 
@@ -107,19 +89,42 @@ public class Main {
 
                 System.out.println("Торговля прошла успешно! Герой заплатил " + goldAmount + " золотых. " +
                         "Желаете продолжить? да/нет");
-            } else {
-                System.out.println("У героя недостаточно золота для покупки товара." +
+
+                String userResponse = br.readLine();
+                if (userResponse.equalsIgnoreCase("да")) {
+                    command("1");
+                } else if (userResponse.equalsIgnoreCase("нет")) {
+
+                } else {
+                    System.out.println("Некорректный ввод. Пожалуйста, введите 'да' или 'нет'.");
+                }
+
+                Navigation();
+            }
+            if (player.getGold() < goldAmount) {
+                player.decreaseGold(goldAmount);
+                //trader.increaseGold(goldAmount);
+
+                //} else {
+                System.out.println("У героя слишком мало золота для покупки товара." +
                         "Желаете продолжить? да/нет");
+
+                String userResponse = br.readLine();
+                if (userResponse.equalsIgnoreCase("да")) {
+                    command("1");
+                } else if (userResponse.equalsIgnoreCase("нет")) {
+                    Navigation();
+                } else {
+                    System.out.println("Некорректный ввод. Пожалуйста, введите 'да' или 'нет'.");
+                }
+            }
+            try {
+                command(br.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        try {
-            command(br.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
-
 
     //после ввода имени, нам открывается меню, вот метод для меню:
     private static void Navigation() {
@@ -132,7 +137,9 @@ public class Main {
     //То есть пользователю нужно ввести номер пункта,
     // который мы также обрабатываем в методе command, а именно в операторе switch:
     private static void commitFight() {
+
         battleScene.fight(player, createMonster(), new FightCallback() {
+
             @Override
             public void fightWin() {
                 System.out.println(String.format("%s победил! Теперь у вас %d опыта и %d золота, а также осталось %d едениц здоровья.",
@@ -150,6 +157,7 @@ public class Main {
             }
         });
     }
+
 
     interface FightCallback {
         void fightWin();
